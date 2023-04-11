@@ -20,6 +20,10 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
+  private Controller controller = new Controller();
+  private Drivetrain drivetrain = new Drivetrain();
+  private Auto auto = new Auto();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -78,7 +82,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    double[] driveVals = controller.getControllerDrive();
+    drivetrain.drive(driveVals[0],driveVals[1],driveVals[2], true);
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
