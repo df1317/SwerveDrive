@@ -2,6 +2,11 @@ package frc.robot;
 
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -15,17 +20,18 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class SwerveModule {
     private static final double kWheelRadius = 0.0508;
-    private static final int kEncoderResolution = 4096;
+    private static final int kDriveEncoderResolution = 42;
+    private static final int kTurnEncoderResolution = 4096;
 
     // change back to = Drivetrain.kMaxAngularSpeed
     private static final double kModuleMaxAngularVelocity = 0;
     private static final double kModuleMaxAngularAcceleration =
         2 * Math.PI; // radians per second squared
 
-  private final MotorController m_driveMotor;
-  private final MotorController m_turningMotor;
+  private final CANSparkMax m_driveMotor;
+  private final CANSparkMax m_turningMotor;
 
-  private final Encoder m_driveEncoder;
+  private final RelativeEncoder m_driveEncoder;
   private final CANCoder m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
@@ -61,21 +67,17 @@ public class SwerveModule {
       int driveEncoderChannelB,
       int turningEncoderChannelA,
       int turningEncoderChannelB) {
-    m_driveMotor = new PWMSparkMax(driveMotorChannel);
-    m_turningMotor = new PWMSparkMax(turningMotorChannel);
+    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-    m_driveEncoder = new Encoder(driveEncoderChannelA, driveEncoderChannelB);
+    m_driveEncoder = m_driveMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, kDriveEncoderResolution);
     m_turningEncoder = new CANCoder(turningEncoderChannelA);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
-
-    // Set the distance (in this case, angle) in radians per pulse for the turning encoder.
-    // This is the the angle through an entire rotation (2 * pi) divided by the
-    // encoder resolution.
-    // m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
+    m_driveEncoder.setPositionConversionFactor(2 * Math.PI * kWheelRadius);
+    m_driveEncoder.setVelocityConversionFactor(2 * Math.PI * kWheelRadius / 60);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -89,7 +91,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        m_driveEncoder.getRate(), new Rotation2d(m_turningEncoder.getPosition()));
+        m_driveEncoder.getVelocity(), new Rotation2d(m_turningEncoder.getPosition()));
   }
 
   /**
@@ -99,7 +101,16 @@ public class SwerveModule {
    */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        m_driveEncoder.getDistance(), new Rotation2d(m_turningEncoder.getPosition()));
+        m_driveEncoder.getPosition(), new Rotation2d(m_turningEncoder.getPosition()));
+  }
+
+  /**
+   * Returns the current velocity of the module.
+   *
+   * @return The current velocity of the module.
+   */
+  public double getVelocity() {
+    return m_driveEncoder.getVelocity();
   }
 
   /**
@@ -114,7 +125,7 @@ public class SwerveModule {
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput =
-        m_drivePIDController.calculate(m_driveEncoder.getRate(), state.speedMetersPerSecond);
+        m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
 
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 

@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 
 public class Controller {
-    public XboxController ctrl = new XboxController(0);
+    private XboxController ctrl = new XboxController(0);
     private double axisDeadzone = 0.05;
 
     public double[] getControllerDrive(){
