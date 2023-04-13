@@ -8,6 +8,9 @@ public class Controller {
     private XboxController ctrl = new XboxController(0);
     private double axisDeadzone = 0.05;
 
+    /**
+     * @return an array of filtered/scaled axis values [x drive, y drive, rotation]
+     */
     public double[] getControllerDrive(){
         double xAxis = ctrl.getLeftX(); 
         double yAxis = ctrl.getLeftY();
@@ -16,8 +19,9 @@ public class Controller {
         double[] output = {xAxis, yAxis, zAxis};
 
         for(int i = 0; i < output.length; i++){
-            double val = output[i];
-            output[i] = MathUtil.applyDeadband(Math.abs(Math.pow(val,2)), axisDeadzone);
+            double mag = Math.abs(output[i]);
+            double sign = Math.signum(output[i]);
+            output[i] = sign*MathUtil.applyDeadband(Math.pow(mag,2), axisDeadzone);
         }
 
         return output;
