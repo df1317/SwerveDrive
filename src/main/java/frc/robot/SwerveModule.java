@@ -64,13 +64,12 @@ public class SwerveModule {
     m_turningEncoder = new CANCoder(turningEncoderChannelA);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
-    // distance traveled for one rotation of the wheel divided by the encoder
-    // resolution.
-    m_driveEncoder.setPositionConversionFactor(2 * Math.PI * kWheelRadius);
-    m_driveEncoder.setVelocityConversionFactor(2 * Math.PI * kWheelRadius / 60);
+    // distance traveled for one rotation of the wheel divided by the encoder resolution.
+    // Keep an eye on this math, I think we did it wrong, there might not need to be a /60 or /kDriveResolution
+    m_driveEncoder.setPositionConversionFactor(2 * Math.PI * kWheelRadius / kDriveEncoderResolution);
+    m_driveEncoder.setVelocityConversionFactor(2 * Math.PI * kWheelRadius / 60 / kDriveEncoderResolution);
 
-    // Limit the PID Controller's input range between -pi and pi and set the input
-    // to be continuous.
+    // Limit the PID Controller's input range between -pi and pi and set the input to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
@@ -118,9 +117,9 @@ public class SwerveModule {
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), state.angle.getRadians());
-
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
+    //Send voltage to the motors
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
