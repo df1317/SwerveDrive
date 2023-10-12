@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 
 public class Controller {
     private XboxController ctrl = new XboxController(0);
-    private double axisDeadzone = 0.05;
+    private static double axisDeadzone = 0.05;
 
     /**
      * @return an array of filtered/scaled axis values [x drive, y drive, rotation]
