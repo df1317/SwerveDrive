@@ -57,6 +57,7 @@ public class Drivetrain {
                 ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     
+    //cap speed
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     
     m_frontLeft.setDesiredState(swerveModuleStates[0]);

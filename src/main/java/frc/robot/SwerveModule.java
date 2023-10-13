@@ -55,8 +55,10 @@ public class SwerveModule {
    * @param turningEncoderChannelA DIO input for the turning encoder channel A
    * @param turningEncoderChannelB DIO input for the turning encoder channel B
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int driveEncoderChannelA, int driveEncoderChannelB, int turningEncoderChannelA,
-      int turningEncoderChannelB) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int driveEncoderChannelA, int driveEncoderChannelB, 
+    int turningEncoderChannelA, int turningEncoderChannelB) {
+    
+    //set up motors and encoders
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
