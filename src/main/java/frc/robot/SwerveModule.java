@@ -19,59 +19,68 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class SwerveModule {
-    private static final double kWheelRadius = 0.0508;
-    private static final int kDriveEncoderResolution = 42;
-    private static final int kTurnEncoderResolution = 4096;
+  private static final double kWheelRadius = 0.0508;
+  private static final int kDriveEncoderResolution = 42;
+  private static final int kTurnEncoderResolution = 42;
 
-    // change back to = Drivetrain.kMaxAngularSpeed
-    private static final double kModuleMaxAngularVelocity = 0;
-    private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
+  // change back to = Drivetrain.kMaxAngularSpeed
+  private static final double kModuleMaxAngularVelocity = 0;
+  private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
 
   private final RelativeEncoder m_driveEncoder;
-  private final CANCoder m_turningEncoder;
+  private final RelativeEncoder m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final ProfiledPIDController m_turningPIDController =
-      new ProfiledPIDController(1, 0,0,
-          new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+  private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0,
+      new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
   /**
-   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
-   * We probably don't need drive encoder channels or turning encoder channel B, so remove them in the season main code
-   * @param driveMotorChannel PWM output for the drive motor.
-   * @param turningMotorChannel PWM output for the turning motor.
-   * @param driveEncoderChannelA DIO input for the drive encoder channel A
-   * @param driveEncoderChannelB DIO input for the drive encoder channel B
+   * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
+   * and turning encoder.
+   * We probably don't need drive encoder channels or turning encoder channel B,
+   * so remove them in the season main code
+   * 
+   * @param driveMotorChannel      PWM output for the drive motor.
+   * @param turningMotorChannel    PWM output for the turning motor.
+   * @param driveEncoderChannelA   DIO input for the drive encoder channel A
+   * @param driveEncoderChannelB   DIO input for the drive encoder channel B
    * @param turningEncoderChannelA DIO input for the turning encoder channel A
    * @param turningEncoderChannelB DIO input for the turning encoder channel B
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int driveEncoderChannelA, int driveEncoderChannelB, 
-    int turningEncoderChannelA, int turningEncoderChannelB) {
-    
-    //set up motors and encoders
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel/*
+                                                                     * , int driveEncoderChannelA, int
+                                                                     * driveEncoderChannelB,
+                                                                     * int turningEncoderChannelA, int
+                                                                     * turningEncoderChannelB
+                                                                     */) {
+
+    // set up motors and encoders
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
     m_driveEncoder = m_driveMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, kDriveEncoderResolution);
-    m_turningEncoder = new CANCoder(turningEncoderChannelA);
+    m_turningEncoder = m_turningMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, kTurnEncoderResolution);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
-    // distance traveled for one rotation of the wheel divided by the encoder resolution.
-    // Keep an eye on this math, I think we did it wrong, there might not need to be a /60 or /kDriveResolution
+    // distance traveled for one rotation of the wheel divided by the encoder
+    // resolution.
+    // Keep an eye on this math, I think we did it wrong, there might not need to be
+    // a /60 or /kDriveResolution
     m_driveEncoder.setPositionConversionFactor(2 * Math.PI * kWheelRadius / kDriveEncoderResolution);
     m_driveEncoder.setVelocityConversionFactor(2 * Math.PI * kWheelRadius / 60 / kDriveEncoderResolution);
 
-    // Limit the PID Controller's input range between -pi and pi and set the input to be continuous.
+    // Limit the PID Controller's input range between -pi and pi and set the input
+    // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
@@ -118,10 +127,11 @@ public class SwerveModule {
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), state.angle.getRadians());
+    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(),
+        state.angle.getRadians());
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    //Send voltage to the motors
+    // Send voltage to the motors
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }

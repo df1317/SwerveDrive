@@ -11,17 +11,17 @@ public class Controller {
     /**
      * @return an array of filtered/scaled axis values [x drive, y drive, rotation]
      */
-    public double[] getControllerDrive(){
-        double xAxis = ctrl.getLeftX(); 
-        double yAxis = ctrl.getLeftY();
-        double zAxis = ctrl.getRightY();
+    public double[] getControllerDrive() {
+        double xAxis = ctrl.getLeftX();
+        double yAxis = -ctrl.getLeftY();
+        double zAxis = -ctrl.getRightY();
 
-        double[] output = {xAxis, yAxis, zAxis};
+        double[] output = { xAxis, yAxis, zAxis };
 
-        for(int i = 0; i < output.length; i++){
+        for (int i = 0; i < output.length; i++) {
             double mag = Math.abs(output[i]);
             double sign = Math.signum(output[i]);
-            output[i] = sign*MathUtil.applyDeadband(Math.pow(mag,2), axisDeadzone);
+            output[i] = sign * MathUtil.applyDeadband(Math.pow(mag, 2), axisDeadzone);
         }
 
         return output;
