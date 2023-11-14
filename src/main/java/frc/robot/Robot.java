@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     double[] driveVals = controller.getControllerDrive();
-    drivetrain.drive(0.2 * driveVals[0], 0.2 * driveVals[1], 0.2 * driveVals[2], true);
+    drivetrain.drive(0.2 * driveVals[0], 0.2 * driveVals[1], 0.2 * driveVals[2], false);
   }
 
   /** This function is called once when the robot is disabled. */

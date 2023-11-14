@@ -1,11 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
@@ -24,14 +25,14 @@ public class Drivetrain {
   private final SwerveModule m_backLeft = new SwerveModule(21, 41);
   private final SwerveModule m_backRight = new SwerveModule(22, 42);
   // 6.12:1 gear ratio
-  private final AnalogGyro m_gyro = new AnalogGyro(0);
+  private final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 
   private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_frontLeftLocation,
       m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       m_kinematics,
-      m_gyro.getRotation2d(),
+      new Rotation2d(m_gyro.getGyroAngleZ()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -55,7 +56,7 @@ public class Drivetrain {
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d(m_gyro.getGyroAngleZ()))
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
     // cap speed
@@ -70,7 +71,7 @@ public class Drivetrain {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(
-        m_gyro.getRotation2d(),
+      new Rotation2d(m_gyro.getGyroAngleZ()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),

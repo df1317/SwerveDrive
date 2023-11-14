@@ -24,7 +24,7 @@ public class SwerveModule {
   private static final int kTurnEncoderResolution = 42;
 
   // change back to = Drivetrain.kMaxAngularSpeed
-  private static final double kModuleMaxAngularVelocity = 0;
+  private static final double kModuleMaxAngularVelocity = Math.PI/2;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final CANSparkMax m_driveMotor;
@@ -37,7 +37,7 @@ public class SwerveModule {
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(1, 0, 0,
+  private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(0.1, 0, 0,
       new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
@@ -127,8 +127,7 @@ public class SwerveModule {
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(),
-        state.angle.getRadians());
+    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), state.angle.getRadians());
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
     // Send voltage to the motors
