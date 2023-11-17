@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.ADIS16448_IMU;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
-  public static final double kMaxSpeed = 3.0; // in meters per second
+  public static final double kMaxSpeed = 1.0; // in meters per second
   public static final double kMaxAngularSpeed = Math.PI; // in radians per second
 
   // These are the positions of the points where the wheels touch the floor
@@ -71,7 +71,7 @@ public class Drivetrain {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(
-      new Rotation2d(m_gyro.getGyroAngleZ()),
+        new Rotation2d(m_gyro.getGyroAngleZ()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
