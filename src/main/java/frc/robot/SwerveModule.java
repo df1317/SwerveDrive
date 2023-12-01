@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.smartdashboard.*;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
@@ -110,14 +108,19 @@ public class SwerveModule {
     return m_driveEncoder.getVelocity();
   }
 
+  public double getDriveEncoder() {
+    return m_driveEncoder.getPosition();
+  }
+
+  public double getTurningEncoder() {
+    return m_turningEncoder.getPosition();
+  }
   /**
    * Sets the desired state for the module.
    *
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    SmartDashboard.putNumber("driveEncoder", m_driveEncoder.getPosition());
-    SmartDashboard.putNumber("turningEncoder", m_turningEncoder.getPosition());
 
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
