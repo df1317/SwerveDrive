@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -99,5 +98,12 @@ public class Drivetrain {
     // back right
     SmartDashboard.putNumber("m_backRight_driveEncoder", m_backRight.getDriveEncoder());
     SmartDashboard.putNumber("m_backRight_turningEncoder", m_backRight.getTurningEncoder());
+  }
+
+  public void resetEncoders() {
+    m_frontLeft.resetEncoder();
+    m_frontRight.resetEncoder();
+    m_backLeft.resetEncoder();
+    m_backRight.resetEncoder();
   }
 }

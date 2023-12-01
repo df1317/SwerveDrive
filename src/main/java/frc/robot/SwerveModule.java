@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveModule {
   private static final double kWheelRadius = 0.0508;
@@ -137,5 +138,10 @@ public class SwerveModule {
     // Send voltage to the motors
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+  }
+
+  public void resetEncoder() {
+    m_driveEncoder.setPosition(0);
+    m_turningEncoder.setPosition(0);
   }
 }

@@ -25,5 +25,7 @@ public class Controller {
 
         return output;
     }
-
+    public boolean getButtons() {
+        return ctrl.getXButton();
+    }
 }
