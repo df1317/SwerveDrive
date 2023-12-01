@@ -85,19 +85,19 @@ public class Drivetrain {
 
   public void dashboard() {
     // front left
-    SmartDashboard.putNumber("driveEncoder", m_frontLeft.getDriveEncoder());
-    SmartDashboard.putNumber("turningEncoder", m_frontLeft.getTurningEncoder());
+    SmartDashboard.putNumber("m_frontLeft_driveEncoder", m_frontLeft.getDriveEncoder());
+    SmartDashboard.putNumber("m_frontLeft_turningEncoder", m_frontLeft.getTurningEncoder());
 
     // front right
-    SmartDashboard.putNumber("driveEncoder", m_frontRight.getDriveEncoder());
-    SmartDashboard.putNumber("turningEncoder", m_frontRight.getTurningEncoder());
+    SmartDashboard.putNumber("m_frontRight_driveEncoder", m_frontRight.getDriveEncoder());
+    SmartDashboard.putNumber("m_frontRight_turningEncoder", m_frontRight.getTurningEncoder());
 
     // back left
-    SmartDashboard.putNumber("driveEncoder", m_backLeft.getDriveEncoder());
-    SmartDashboard.putNumber("turningEncoder", m_backLeft.getTurningEncoder());
+    SmartDashboard.putNumber("m_backLeft_driveEncoder", m_backLeft.getDriveEncoder());
+    SmartDashboard.putNumber("m_backLeft_turningEncoder", m_backLeft.getTurningEncoder());
 
     // back right
-    SmartDashboard.putNumber("driveEncoder", m_backRight.getDriveEncoder());
-    SmartDashboard.putNumber("turningEncoder", m_backRight.getTurningEncoder());
+    SmartDashboard.putNumber("m_backRight_driveEncoder", m_backRight.getDriveEncoder());
+    SmartDashboard.putNumber("m_backRight_turningEncoder", m_backRight.getTurningEncoder());
   }
 }
