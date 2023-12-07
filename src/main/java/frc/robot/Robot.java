@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Drivetrain;
+import frc.robot.Controller;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -101,6 +103,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     double[] driveVals = controller.getControllerDrive();
     drivetrain.drive(0.2 * driveVals[0], 0.2 * driveVals[1], 0.2 * driveVals[2], false);
+    drivetrain.dashboard();
+    if (controller.getButtons()) {
+      drivetrain.resetEncoders();
+    }
   }
 
   /** This function is called once when the robot is disabled. */

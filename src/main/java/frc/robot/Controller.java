@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 
 public class Controller {
     private XboxController ctrl = new XboxController(0);
@@ -26,5 +25,7 @@ public class Controller {
 
         return output;
     }
-
+    public boolean getButtons() {
+        return ctrl.getXButton();
+    }
 }

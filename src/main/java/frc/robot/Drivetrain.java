@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -10,7 +11,7 @@ import edu.wpi.first.wpilibj.ADIS16448_IMU;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
-  public static final double kMaxSpeed = 3.0; // in meters per second
+  public static final double kMaxSpeed = 1.0; // in meters per second
   public static final double kMaxAngularSpeed = Math.PI; // in radians per second
 
   // These are the positions of the points where the wheels touch the floor
@@ -38,7 +39,8 @@ public class Drivetrain {
           m_frontRight.getPosition(),
           m_backLeft.getPosition(),
           m_backRight.getPosition()
-      });
+      }
+      );
 
   public Drivetrain() {
     m_gyro.reset();
@@ -71,12 +73,37 @@ public class Drivetrain {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(
-      new Rotation2d(m_gyro.getGyroAngleZ()),
+        new Rotation2d(m_gyro.getGyroAngleZ()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
             m_backLeft.getPosition(),
             m_backRight.getPosition()
         });
+  }
+
+  public void dashboard() {
+    // front left
+    SmartDashboard.putNumber("m_frontLeft_driveEncoder", m_frontLeft.getDriveEncoder());
+    SmartDashboard.putNumber("m_frontLeft_turningEncoder", m_frontLeft.getTurningEncoder());
+
+    // front right
+    SmartDashboard.putNumber("m_frontRight_driveEncoder", m_frontRight.getDriveEncoder());
+    SmartDashboard.putNumber("m_frontRight_turningEncoder", m_frontRight.getTurningEncoder());
+
+    // back left
+    SmartDashboard.putNumber("m_backLeft_driveEncoder", m_backLeft.getDriveEncoder());
+    SmartDashboard.putNumber("m_backLeft_turningEncoder", m_backLeft.getTurningEncoder());
+
+    // back right
+    SmartDashboard.putNumber("m_backRight_driveEncoder", m_backRight.getDriveEncoder());
+    SmartDashboard.putNumber("m_backRight_turningEncoder", m_backRight.getTurningEncoder());
+  }
+
+  public void resetEncoders() {
+    m_frontLeft.resetEncoder();
+    m_frontRight.resetEncoder();
+    m_backLeft.resetEncoder();
+    m_backRight.resetEncoder();
   }
 }
