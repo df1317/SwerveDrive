@@ -82,7 +82,7 @@ public class Drivetrain {
         });
   }
 
-  public void dashboard() {
+  public void dashboard(double[] driveVals) {
     // front left
     SmartDashboard.putNumber("m_frontLeft_driveEncoder", m_frontLeft.getDriveEncoder());
     SmartDashboard.putNumber("m_frontLeft_turningEncoder", m_frontLeft.getTurningEncoder());
@@ -98,6 +98,8 @@ public class Drivetrain {
     // back right
     SmartDashboard.putNumber("m_backRight_driveEncoder", m_backRight.getDriveEncoder());
     SmartDashboard.putNumber("m_backRight_turningEncoder", m_backRight.getTurningEncoder());
+
+    SmartDashboard.putNumberArray("driveVals", driveVals);
   }
 
   public void resetEncoders() {
