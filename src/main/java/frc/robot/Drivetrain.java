@@ -86,6 +86,9 @@ public class Drivetrain {
   }
 
   public void dashboard(double[] driveVals) {
+    // gyroz
+    SmartDashboard.putNumber("gyroz", m_gyro.getGyroAngleZ());
+
     // front left
     SmartDashboard.putNumber("m_frontLeft_driveEncoder", m_frontLeft.getDriveEncoder());
     SmartDashboard.putNumber("m_frontLeft_turningEncoder", m_frontLeft.getTurningEncoder());
