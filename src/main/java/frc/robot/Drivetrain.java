@@ -117,5 +117,6 @@ public class Drivetrain {
     m_frontRight.resetEncoder();
     m_backLeft.resetEncoder();
     m_backRight.resetEncoder();
+    m_gyro.reset();
   }
 }
