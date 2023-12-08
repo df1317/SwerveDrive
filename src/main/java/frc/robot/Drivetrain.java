@@ -19,10 +19,10 @@ public class Drivetrain {
 
   // These are the positions of the points where the wheels touch the floor
   // relative to the center of the robot in meters
-  private final Translation2d m_frontLeftLocation = new Translation2d(0.2921, 0.2921);
-  private final Translation2d m_frontRightLocation = new Translation2d(0.2921, -0.2921);
-  private final Translation2d m_backLeftLocation = new Translation2d(-0.2921, 0.2921);
-  private final Translation2d m_backRightLocation = new Translation2d(-0.2921, -0.2921);
+  private final Translation2d m_frontLeftLocation = new Translation2d(-0.2921, 0.2921);
+  private final Translation2d m_frontRightLocation = new Translation2d(0.2921, 0.2921);
+  private final Translation2d m_backLeftLocation = new Translation2d(-0.2921, -0.2921);
+  private final Translation2d m_backRightLocation = new Translation2d(0.2921, -0.2921);
 
   private final SwerveModule m_frontLeft = new SwerveModule(11, 31);
   private final SwerveModule m_frontRight = new SwerveModule(12, 32);
