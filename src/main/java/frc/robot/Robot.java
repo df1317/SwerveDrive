@@ -7,8 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Drivetrain;
-import frc.robot.Controller;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,7 +25,7 @@ public class Robot extends TimedRobot {
 
   private Controller controller = new Controller();
   private Drivetrain drivetrain = new Drivetrain();
-  private Auto auto = new Auto();
+  // private Auto auto = new Auto();
 
   /**
    * This function is run when the robot is first started up and should be used
