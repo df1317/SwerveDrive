@@ -1,6 +1,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
+
+import java.io.Console;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -11,7 +14,7 @@ import edu.wpi.first.wpilibj.ADIS16448_IMU;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
-  public static final double kMaxSpeed = 1.0; // in meters per second
+  public static final double kMaxSpeed = 3.0; // in meters per second
   public static final double kMaxAngularSpeed = Math.PI; // in radians per second
 
   // These are the positions of the points where the wheels touch the floor
@@ -82,7 +85,10 @@ public class Drivetrain {
         });
   }
 
-  public void dashboard() {
+  public void dashboard(double[] driveVals) {
+    // gyroz
+    SmartDashboard.putNumber("gyroz", m_gyro.getGyroAngleZ());
+
     // front left
     SmartDashboard.putNumber("m_frontLeft_driveEncoder", m_frontLeft.getDriveEncoder());
     SmartDashboard.putNumber("m_frontLeft_turningEncoder", m_frontLeft.getTurningEncoder());
@@ -98,6 +104,12 @@ public class Drivetrain {
     // back right
     SmartDashboard.putNumber("m_backRight_driveEncoder", m_backRight.getDriveEncoder());
     SmartDashboard.putNumber("m_backRight_turningEncoder", m_backRight.getTurningEncoder());
+
+    // joysticks
+    for (int i = 0; i < driveVals.length; i++) {
+      String key = "driveVals" + i;
+      SmartDashboard.putNumber(key, driveVals[i]);
+    }
   }
 
   public void resetEncoders() {
@@ -105,5 +117,6 @@ public class Drivetrain {
     m_frontRight.resetEncoder();
     m_backLeft.resetEncoder();
     m_backRight.resetEncoder();
+    m_gyro.reset();
   }
 }
