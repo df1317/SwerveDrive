@@ -22,10 +22,10 @@ public class Drivetrain {
   private final Translation2d m_backLeftLocation = new Translation2d(-0.2921, -0.2921);
   private final Translation2d m_backRightLocation = new Translation2d(0.2921, -0.2921);
 
-  private final SwerveModule m_frontLeft = new SwerveModule(11, 31);
-  private final SwerveModule m_frontRight = new SwerveModule(12, 32);
-  private final SwerveModule m_backLeft = new SwerveModule(21, 41);
-  private final SwerveModule m_backRight = new SwerveModule(22, 42);
+  private final SwerveModule m_frontLeft = new SwerveModule(11, 31, 51);
+  private final SwerveModule m_frontRight = new SwerveModule(12, 32, 52);
+  private final SwerveModule m_backLeft = new SwerveModule(21, 41, 61);
+  private final SwerveModule m_backRight = new SwerveModule(22, 42, 62);
   // 6.12:1 gear ratio
   private final ADIS16448_IMU m_gyro = new ADIS16448_IMU();
 

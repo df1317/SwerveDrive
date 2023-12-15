@@ -1,9 +1,15 @@
 package frc.robot;
 
+import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -14,9 +20,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class SwerveModule {
+  int frameRateMs = 100; // Example: 100ms. Adjust this value based on your needs.
   private static final double kWheelRadius = 0.0508;
   private static final int kDriveEncoderResolution = 42;
-  private static final int kTurnEncoderResolution = 42;
 
   // change back to = Drivetrain.kMaxAngularSpeed
   private static final double kModuleMaxAngularVelocity = Math.PI;
@@ -26,7 +32,7 @@ public class SwerveModule {
   private final CANSparkMax m_turningMotor;
 
   private final RelativeEncoder m_driveEncoder;
-  private final RelativeEncoder m_turningEncoder;
+  private final CANCoder m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
@@ -52,7 +58,7 @@ public class SwerveModule {
    * @param turningEncoderChannelA DIO input for the turning encoder channel A
    * @param turningEncoderChannelB DIO input for the turning encoder channel B
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel/*
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int canCoderChannel/*
                                                                      * , int driveEncoderChannelA, int
                                                                      * driveEncoderChannelB,
                                                                      * int turningEncoderChannelA, int
@@ -62,9 +68,19 @@ public class SwerveModule {
     // set up motors and encoders
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    m_driveMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, frameRateMs);
+    m_turningMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, frameRateMs);
 
     m_driveEncoder = m_driveMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, kDriveEncoderResolution);
-    m_turningEncoder = m_turningMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, kTurnEncoderResolution);
+    m_turningEncoder = new CANCoder(canCoderChannel);
+    m_turningEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, frameRateMs, 50); // 50ms timeout
+
+    CANCoderConfiguration config = new CANCoderConfiguration();
+    // set units of the CANCoder to radians, with velocity being radians per second
+    config.sensorCoefficient = 2 * Math.PI / 4096.0;
+    config.unitString = "rad";
+    config.sensorTimeBase = SensorTimeBase.PerSecond;
+    m_turningEncoder.configAllSettings(config);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
