@@ -3,11 +3,13 @@ package frc.robot;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -18,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class SwerveModule {
+  int frameRateMs = 100; // Example: 100ms. Adjust this value based on your needs.
   private static final double kWheelRadius = 0.0508;
   private static final int kDriveEncoderResolution = 42;
 
@@ -65,9 +68,12 @@ public class SwerveModule {
     // set up motors and encoders
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    m_driveMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, frameRateMs);
+    m_turningMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, frameRateMs);
 
     m_driveEncoder = m_driveMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, kDriveEncoderResolution);
     m_turningEncoder = new CANCoder(canCoderChannel);
+    m_turningEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, frameRateMs, 50); // 50ms timeout
 
     CANCoderConfiguration config = new CANCoderConfiguration();
     // set units of the CANCoder to radians, with velocity being radians per second
