@@ -51,6 +51,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    double[] driveVals = controller.getControllerDrive();
+    drivetrain.dashboard(driveVals);
+    if (controller.getButtons()) {
+      drivetrain.resetEncoders();
+    }
   }
 
   /**
@@ -101,10 +106,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     double[] driveVals = controller.getControllerDrive();
     drivetrain.drive(0.2 * driveVals[0], 0.2 * driveVals[1], 0.2 * driveVals[2], false);
-    drivetrain.dashboard(driveVals);
-    if (controller.getButtons()) {
-      drivetrain.resetEncoders();
-    }
   }
 
   /** This function is called once when the robot is disabled. */
