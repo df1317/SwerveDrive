@@ -1,9 +1,13 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorTimeBase;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+import com.ctre.phoenix.sensors.CANCoderFaults;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -81,6 +85,19 @@ public class SwerveModule {
     config.unitString = "rad";
     config.sensorTimeBase = SensorTimeBase.PerSecond;
     m_turningEncoder.configAllSettings(config);
+
+    ErrorCode error = m_turningEncoder.getLastError();
+    if (error != ErrorCode.OK) {
+        DriverStation.reportError("Error initializing turning encoder: " + error, false);
+    }
+
+    CANCoderFaults faults = new CANCoderFaults();
+    ErrorCode faultsError = m_turningEncoder.getFaults(faults);
+    if (faultsError != ErrorCode.OK) {
+        DriverStation.reportError("Error getting faults from turning encoder: " + faultsError, false);
+    }
+
+    m_turningEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, frameRateMs);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
