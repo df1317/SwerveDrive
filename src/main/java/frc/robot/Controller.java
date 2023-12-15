@@ -13,7 +13,7 @@ public class Controller {
     public double[] getControllerDrive() {
         double xAxis = ctrl.getLeftX();
         double yAxis = -ctrl.getLeftY();
-        double zAxis = -ctrl.getRightY();
+        double zAxis = -ctrl.getRightX();
 
         double[] output = { xAxis, yAxis, zAxis };
 
