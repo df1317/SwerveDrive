@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class SwerveSubsystem extends SubsystemBase {
-  private final ADIS16448_IMU pigeon;
+  private final ADIS16448_IMU gyro;
 
   private SwerveDriveOdometry swerveOdometry;
   private SwerveModule[] mSwerveMods;
@@ -29,8 +29,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   /** Creates a new SwerveSubsystem. */
   public SwerveSubsystem() {
-    //instantiates new pigeon gyro, wipes it, and zeros it
-    pigeon = new ADIS16448_IMU();
+    //instantiates new gyro, wipes it, and zeros it
+    gyro = new ADIS16448_IMU();
     zeroGyro();
 
     //Creates all four swerve modules into a swerve drive
@@ -120,18 +120,18 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
   public void zeroGyro() {
-    pigeon.reset();
+    gyro.reset();
   }
 
   public Rotation2d getYaw() {
     //fancy if else loop again
-    return (Constants.SwerveConstants.invertPigeon)
-        ? Rotation2d.fromDegrees(360 - pigeon.getGyroAngleY())
-        : Rotation2d.fromDegrees(pigeon.getGyroAngleY());
+    return (Constants.SwerveConstants.invertGyro)
+        ? Rotation2d.fromDegrees(360 - gyro.getGyroAngleY())
+        : Rotation2d.fromDegrees(gyro.getGyroAngleY());
   }
 
   public boolean AutoBalance(){
-    double roll_error = pigeon.getGyroAngleX();//the angle of the robot
+    double roll_error = gyro.getGyroAngleX();//the angle of the robot
     double balance_kp = -.005;//Variable muliplied by roll_error
     double position_adjust = 0.0;
     double min_command = 0.0;//adds a minimum input to the motors to overcome friction if the position adjust isn't enough
@@ -166,7 +166,7 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveOdometry.update(getYaw(), getPositions());
     field.setRobotPose(getPose());
 
-    SmartDashboard.putNumber("Pigeon Roll",  pigeon.getGyroRateX());
+    SmartDashboard.putNumber("Pigeon Roll",  gyro.getGyroRateX());
 
     for (SwerveModule mod : mSwerveMods) {
       SmartDashboard.putNumber(
