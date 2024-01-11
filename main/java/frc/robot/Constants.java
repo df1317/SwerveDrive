@@ -28,8 +28,8 @@ public final class Constants {
     public static final boolean invertPigeon = false;
 
     /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(32.5);//to find
-    public static final double wheelBase = Units.inchesToMeters(32.5);//to find
+    public static final double trackWidth = Units.inchesToMeters(23);//to find
+    public static final double wheelBase = Units.inchesToMeters(23);//to find
     public static final double wheelDiameter = Units.inchesToMeters(4.0);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
