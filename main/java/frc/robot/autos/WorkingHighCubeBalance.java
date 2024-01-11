@@ -1,4 +1,3 @@
-
 package frc.robot.autos;
 
 import edu.wpi.first.math.controller.PIDController;
