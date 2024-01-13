@@ -53,6 +53,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
   //takes the coordinate on field wants to go to, the rotation of it, whether or not in field relative mode, and if in open loop control
   {
+    SmartDashboard.putBoolean("Field Relative", fieldRelative);
     SwerveModuleState[] swerveModuleStates =
       Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
           //fancy way to do an if else statement 

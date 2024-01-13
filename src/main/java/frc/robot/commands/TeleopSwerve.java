@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -58,6 +59,7 @@ public class TeleopSwerve extends CommandBase {
             MathUtil.applyDeadband(m_rotationSupplier.getAsDouble(), Constants.SwerveConstants.inputDeadband));
 
     /* Drive */
+    SmartDashboard.putNumber("maxspeed", Constants.SwerveConstants.maxSpeed);
     m_SwerveSubsystem.drive(
         //the joystick values (-1 to 1) multiplied by the max speed of the drivetrain
         new Translation2d(translationVal, strafeVal).times(Constants.SwerveConstants.maxSpeed),
