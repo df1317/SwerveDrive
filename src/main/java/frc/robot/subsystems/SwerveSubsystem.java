@@ -164,7 +164,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-        swerveOdometry.update(getYaw(), getPositions());
+    swerveOdometry.update(getYaw(), getPositions());
     field.setRobotPose(getPose());
 
     SmartDashboard.putNumber("Pigeon Roll",  gyro.getGyroRateX());
