@@ -91,7 +91,12 @@ public final class Constants {
     /* Angle Encoder Invert */
     public static final boolean canCoderInvert = false;
     
-
+    public static final class Firing {
+      public static final int MotorID0 = 01;
+      public static final int MotorID1 = 02;
+      public static final int Speed = 1; // must be between -1 and 1
+      public static final double Duration = 1.0;
+    }
         /* Module Specific Constants */
     /* Front Left Module - Module 0 */
     public static final class Mod0 {

@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.HighCubeBalance;
+import frc.robot.commands.FireNote;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -47,10 +49,7 @@ public class RobotContainer {
 
   /* Subsystems */
   private final SwerveSubsystem m_SwerveSubsystem = new SwerveSubsystem();
-
-
-
-  
+  private final FiringSubsystem m_FiringSubsystem = new FiringSubsystem();
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -78,7 +77,8 @@ public class RobotContainer {
   private void configureBindings() {
     m_XboxController.button(Button.kY.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
     m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
-   
+    FireNote fireNoteCommand = new FireNote(m_FiringSubsystem);
+    m_XboxController.button(Button.kX.value).onTrue(fireNoteCommand);
   }
 
   /**
