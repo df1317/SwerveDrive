@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.FiringSubsystem;
 import frc.robot.Constants;
 
@@ -8,12 +9,14 @@ public class FireNote extends CommandBase {
     private double startTime;
     private double duration = Constants.SwerveConstants.Firing.Duration;
     private double speed;
+    private Trigger xButton;
 
     private FiringSubsystem m_FiringSubsystem;
 
-    public FireNote(FiringSubsystem FiringSub, boolean far) {
+    public FireNote(FiringSubsystem FiringSub, boolean far, Trigger xButton) {
         m_FiringSubsystem = FiringSub;
         this.duration = Constants.SwerveConstants.Firing.Duration;
+        this.xButton = xButton;
         addRequirements(FiringSub);
         if (far) {
             speed = Constants.SwerveConstants.Firing.FarSpeed;
@@ -32,8 +35,9 @@ public class FireNote extends CommandBase {
     
     @Override
     public boolean isFinished() {
-        // Check if the specified duration has passed
-        return edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration;
+        // Check if the button is released or if the specified duration has passed
+        return !xButton.getAsBoolean() ||
+            (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration);
     }
 
     @Override
