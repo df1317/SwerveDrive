@@ -94,8 +94,9 @@ public final class Constants {
     public static final class Firing {
       public static final int MotorID0 = 01;
       public static final int MotorID1 = 02;
-      public static final int Speed = 1; // must be between -1 and 1
-      public static final double Duration = 1.0;
+      public static final double NearSpeed = 0.35; // must be between -1 and 1
+      public static final double FarSpeed = 0.35; // must be between -1 and 1
+      public static final double Duration = 3.0;
     }
         /* Module Specific Constants */
     /* Front Left Module - Module 0 */

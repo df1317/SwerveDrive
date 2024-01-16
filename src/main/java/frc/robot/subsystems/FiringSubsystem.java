@@ -11,9 +11,9 @@ public class FiringSubsystem extends SubsystemBase {
     private TalonSRX motor0 = new TalonSRX(Constants.SwerveConstants.Firing.MotorID0);
     private TalonSRX motor1 = new TalonSRX(Constants.SwerveConstants.Firing.MotorID1);  
 
-    public void spinUp() {
-        motor0.set(TalonSRXControlMode.PercentOutput, Constants.SwerveConstants.Firing.Speed);
-        motor1.set(TalonSRXControlMode.PercentOutput, Constants.SwerveConstants.Firing.Speed);
+    public void spinUp(double speed) {
+        motor0.set(TalonSRXControlMode.PercentOutput, -speed);
+        motor1.set(TalonSRXControlMode.PercentOutput, speed);
     }
 
     public void spinDown() {

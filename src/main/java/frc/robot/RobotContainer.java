@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.HighCubeBalance;
+import frc.robot.autos.exampleAuto;
 import frc.robot.commands.FireNote;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.FiringSubsystem;
@@ -75,10 +75,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_XboxController.button(Button.kY.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
+    m_XboxController.button(Button.kA.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
     m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
-    FireNote fireNoteCommand = new FireNote(m_FiringSubsystem);
-    m_XboxController.button(Button.kX.value).onTrue(fireNoteCommand);
+    FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, true);
+    FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, false);
+    m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
+    m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
   }
 
   /**
@@ -88,6 +90,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new HighCubeBalance(m_SwerveSubsystem);
+    return new exampleAuto(m_SwerveSubsystem);
   }
 }
