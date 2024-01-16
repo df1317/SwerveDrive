@@ -77,8 +77,8 @@ public class RobotContainer {
   private void configureBindings() {
     m_XboxController.button(Button.kA.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
     m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
-    FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, true);
-    FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, false);
+    FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false);
+    FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true);
     m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
     m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
   }
