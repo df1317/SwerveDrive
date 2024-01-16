@@ -9,14 +9,14 @@ public class FireNote extends CommandBase {
     private double startTime;
     private double duration = Constants.SwerveConstants.Firing.Duration;
     private double speed;
-    private Trigger xButton;
+    private Trigger button;
 
     private FiringSubsystem m_FiringSubsystem;
 
-    public FireNote(FiringSubsystem FiringSub, boolean far, Trigger xButton) {
+    public FireNote(FiringSubsystem FiringSub, boolean far, Trigger button) {
         m_FiringSubsystem = FiringSub;
         this.duration = Constants.SwerveConstants.Firing.Duration;
-        this.xButton = xButton;
+        this.button = button;
         addRequirements(FiringSub);
         if (far) {
             speed = Constants.SwerveConstants.Firing.FarSpeed;
@@ -36,7 +36,7 @@ public class FireNote extends CommandBase {
     @Override
     public boolean isFinished() {
         // Check if the button is released or if the specified duration has passed
-        return !xButton.getAsBoolean() ||
+        return !button.getAsBoolean() ||
             (edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - startTime >= duration);
     }
 
