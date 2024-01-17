@@ -50,25 +50,33 @@ public class SwerveSubsystem extends SubsystemBase {
     SmartDashboard.putData("Field", field);
   }
 
-  public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
-  //takes the coordinate on field wants to go to, the rotation of it, whether or not in field relative mode, and if in open loop control
-  {
+  public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    // Display whether the control is field relative on SmartDashboard
     SmartDashboard.putBoolean("Field Relative", fieldRelative);
-    SwerveModuleState[] swerveModuleStates =
-      Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
-          //fancy way to do an if else statement 
-          //if field relative == true, use field relative stuff, otherwise use robot centric
-          fieldRelative
-              ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                  translation.getX(), translation.getY(), rotation, getYaw())
-              : new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
-  //sets to top speed if above top speed
-  SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
-  //set states for all 4 modules
-  for (SwerveModule mod : mSwerveMods) {
-    mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
-  }
+    // Calculate swerve module states based on control mode (field-relative or robot-centric)
+    SwerveModuleState[] swerveModuleStates;
+    if (fieldRelative) {
+        SmartDashboard.putNumber("Gyro Yaw", getYaw().getDegrees());
+        // Use field-relative control if fieldRelative is true
+        swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                translation.getX(), translation.getY(), rotation, getYaw())
+        );
+    } else {
+        // Use robot-centric control if fieldRelative is false
+        swerveModuleStates = Constants.SwerveConstants.swerveKinematics.toSwerveModuleStates(
+            new ChassisSpeeds(translation.getX(), translation.getY(), rotation)
+        );
+    }
+
+    // Set to top speed if above top speed
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
+
+    // Set states for all 4 modules
+    for (SwerveModule mod : mSwerveMods) {
+        mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+    }
 }
 
   /* Used by SwerveControllerCommand in Auto */
@@ -127,8 +135,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public Rotation2d getYaw() {
     //fancy if else loop again
     return (Constants.SwerveConstants.invertGyro)
-        ? Rotation2d.fromDegrees(360 - gyro.getGyroAngleY())
-        : Rotation2d.fromDegrees(gyro.getGyroAngleY());
+        ? Rotation2d.fromDegrees(360 - (360*gyro.getGyroAngleY()))
+        : Rotation2d.fromDegrees(360*gyro.getGyroAngleY());
   }
 
   public boolean AutoBalance(){
