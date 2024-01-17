@@ -45,11 +45,6 @@ public class RobotContainer {
     new Trigger(m_XboxController.x());
   public final Trigger yButton =
     new Trigger(m_XboxController.y());
-  public final Trigger leftTrigger =
-    new Trigger(m_XboxController.leftTrigger());
-  public final Trigger rightTrigger =
-    new Trigger(m_XboxController.rightTrigger());
-
 
   /*private final int translationAxis = Joystick.AxisType.kY.value; //left flight stick
   private final int strafeAxis = Joystick.AxisType.kX.value; //left flight stick
@@ -86,8 +81,8 @@ public class RobotContainer {
     m_XboxController.button(Button.kA.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.zeroGyro()));
     m_XboxController.button(Button.kB.value).onTrue(new InstantCommand(() -> m_SwerveSubsystem.setWheelsToX()));
     // setup two firing speeds
-    FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false, xButton, leftTrigger, rightTrigger);
-    FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton, leftTrigger, rightTrigger);
+    FireNote fireNoteCommandFar = new FireNote(m_FiringSubsystem, false, xButton);
+    FireNote fireNoteCommandNear = new FireNote(m_FiringSubsystem, true, yButton);
     m_XboxController.button(Button.kX.value).onTrue(fireNoteCommandFar);
     m_XboxController.button(Button.kY.value).onTrue(fireNoteCommandNear);
   }

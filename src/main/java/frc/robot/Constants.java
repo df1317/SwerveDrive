@@ -97,7 +97,6 @@ public final class Constants {
       public static final double NearSpeed = 0.35; // must be between -1 and 1
       public static final double FarSpeed = 1; // must be between -1 and 1
       public static final double Duration = 3.0;
-      public static final double TurnAmount = 0.5;
     }
         /* Module Specific Constants */
     /* Front Left Module - Module 0 */
