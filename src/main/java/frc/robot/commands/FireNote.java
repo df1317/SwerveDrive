@@ -9,14 +9,19 @@ public class FireNote extends CommandBase {
     private double startTime;
     private double duration = Constants.SwerveConstants.Firing.Duration;
     private double speed;
+    private double direction = 0;
     private Trigger button;
+    private Trigger leftTrigger;
+    private Trigger rightTrigger;
 
     private FiringSubsystem m_FiringSubsystem;
 
-    public FireNote(FiringSubsystem FiringSub, boolean far, Trigger button) {
+    public FireNote(FiringSubsystem FiringSub, boolean far, Trigger button, Trigger leftTrigger, Trigger rightTrigger) {
         m_FiringSubsystem = FiringSub;
         this.duration = Constants.SwerveConstants.Firing.Duration;
         this.button = button;
+        this.leftTrigger = leftTrigger;
+        this.rightTrigger = rightTrigger;
         addRequirements(FiringSub);
         if (far) {
             speed = Constants.SwerveConstants.Firing.FarSpeed;
@@ -30,7 +35,13 @@ public class FireNote extends CommandBase {
     public void initialize() {
         startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
         // Spin up motors to the specified speed
-        m_FiringSubsystem.spinUp(speed);
+        if (leftTrigger.getAsBoolean()) {
+            direction = -1;
+        } else if (rightTrigger.getAsBoolean()) {
+            direction = 1;
+        }
+
+        m_FiringSubsystem.spinUp(speed, direction);
     }
     
     @Override
