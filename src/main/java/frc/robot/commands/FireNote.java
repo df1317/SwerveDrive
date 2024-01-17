@@ -35,10 +35,12 @@ public class FireNote extends CommandBase {
     public void initialize() {
         startTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
         // Spin up motors to the specified speed
-        if (leftTrigger.getAsBoolean()) {
+        if (leftTrigger.getAsBoolean() && !rightTrigger.getAsBoolean()) {
             direction = -1;
-        } else if (rightTrigger.getAsBoolean()) {
+        } else if (rightTrigger.getAsBoolean() && !leftTrigger.getAsBoolean()) {
             direction = 1;
+        } else {
+            direction = 0;
         }
 
         m_FiringSubsystem.spinUp(speed, direction);
