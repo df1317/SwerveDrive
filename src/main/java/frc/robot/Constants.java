@@ -24,7 +24,7 @@ import frc.lib.SwerveModuleConstants;
 public final class Constants {
   public static final class SwerveConstants{
     public static final double inputDeadband = .1;
-    public static final boolean invertGyro = false;
+    public static final boolean invertGyro = true;
 
     /* Drivetrain Constants */
     public static final double trackWidth = Units.inchesToMeters(23);//to find
