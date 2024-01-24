@@ -78,7 +78,7 @@ public final class Constants {
 
     /* Swerve Profiling Values */
     public static final double maxSpeed = 9; // meters per second
-    public static final double maxAngularVelocity = 11.5; //what are these units?
+    public static final double maxAngularVelocity = 11.5; // these are for rotation
 
     /* Neutral Modes */
     public static final IdleMode angleNeutralMode = IdleMode.kBrake;
